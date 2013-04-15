@@ -8,7 +8,7 @@ namespace :tenants do
       ActiveRecord::Migration.verbose = verbose
 
       dumped_schema = false
-      User.all.each do |user|
+      Tenant.all.each do |user|
         puts "migrating user #{user.id}"
         versions_in_private_schemas = []
         PgTools.in_search_path(user.id) {
@@ -43,7 +43,7 @@ namespace :tenants do
       verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
       ActiveRecord::Migration.verbose = verbose
 
-      user = User.find(ENV["USER_ID"])
+      user = Tenant.find(ENV["USER_ID"])
       puts "migrating user #{user.id}"
       PgTools.in_search_path(user.id) {
         version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
@@ -69,7 +69,7 @@ namespace :tenants do
     end
 
     task :load => :environment do
-      User.all.each {|u|
+      Tenant.all.each {|u|
         PgTools.set_search_path ENV["search_path"], false
         load "#{Rails.root}/db/private/schema.rb"
       }
