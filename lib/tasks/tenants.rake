@@ -13,7 +13,7 @@ namespace :tenants do
         versions_in_private_schemas = []
         PgTools.in_search_path(user.id) {
           version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
-          ActiveRecord::Migrator.migrate("db/migrate/private_schemas", version) 
+          ActiveRecord::Migrator.migrate("db/migrate/private", version) 
           versions_in_private_schemas = ActiveRecord::Migrator.get_all_versions
           ENV["search_path"] = user.id.to_s
           Rake::Task['tenants:schema:dump'].invoke unless dumped_schema 
@@ -47,7 +47,7 @@ namespace :tenants do
       puts "migrating user #{user.id}"
       PgTools.in_search_path(user.id) {
         version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
-        ActiveRecord::Migrator.migrate("db/migrate/private_schemas", version) 
+        ActiveRecord::Migrator.migrate("db/migrate/private", version) 
         ENV["search_path"] = user.id.to_s
         Rake::Task['tenants:schema:dump'].invoke 
       }
